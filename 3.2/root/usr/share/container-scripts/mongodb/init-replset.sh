@@ -5,6 +5,7 @@ set -o nounset
 set -o pipefail
 
 source "${CONTAINER_SCRIPTS_PATH}/common.sh"
+source "${CONTAINER_SCRIPTS_PATH}/setup_rhmap.sh"
 
 # This is a full hostname that will be added to replica set
 # (for example, "replica-2.mongodb.myproject.svc.cluster.local")
@@ -32,7 +33,8 @@ function initiate() {
   info "Creating MongoDB users ..."
   mongo_create_admin
   [[ -v CREATE_USER ]] && mongo_create_user "-u admin -p ${MONGODB_ADMIN_PASSWORD}"
-
+  
+  setUpDatabases "-u admin -p ${MONGODB_ADMIN_PASSWORD}"
   info "Successfully initialized replica set"
 }
 
